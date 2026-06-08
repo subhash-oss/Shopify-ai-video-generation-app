@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@layer base {
+  html,
+  body,
+  #app {
+    @apply min-h-full w-full;
+  }
+}
+
 /* Mirrors theme.extend.maxWidth in tailwind.config.js (required in v4 when custom spacing overrides size tokens). */
 @theme {
   --max-width-xs: 20rem;

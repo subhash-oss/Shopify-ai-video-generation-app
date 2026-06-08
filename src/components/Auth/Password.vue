@@ -243,7 +243,7 @@ const handleSubmit = async () => {
 
   try {
     await new Promise((resolve) => setTimeout(resolve, 800))
-    await router.push("/signin")
+    await router.push("/home")
   } catch {
     errorMessage.value = "Invalid password."
   } finally {

@@ -7,11 +7,23 @@ import ForgotPassword from "../views/ForgotPassword.vue"
 import ResetLink from "../views/ResetLink.vue"
 import ResetPassword from "../views/ResetPassword.vue"
 import PasswordUpdation from "../views/PasswordUpdation.vue"
+import Home from "../views/Home.vue"
+import Settings from "../views/Settings.vue"
 
 const routes = [
   {
     path: "/",
-    redirect: "/signup",
+    redirect: "/home",
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
   },
   {
     path: "/signup",
