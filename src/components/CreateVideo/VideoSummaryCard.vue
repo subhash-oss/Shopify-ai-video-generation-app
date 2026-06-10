@@ -1,9 +1,12 @@
 <template>
-  <aside class="glass_card flex flex-col overflow-hidden rounded-3xl p-5 md:p-6">
-    <div class="relative mx-auto mb-6 h-44 w-full max-w-[15rem]">
-      <div
-        class="absolute top-0 left-0 h-32 w-32 overflow-hidden rounded-2xl border-2 border-white shadow-md"
-      >
+  <aside class="video_summary_card gradient-top-bottom">
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f3e8ff]/80 to-transparent"
+      aria-hidden="true"
+    />
+
+    <div class="video_summary_preview shrink-0">
+      <div class="video_summary_image_product">
         <img
           :src="product.image"
           :alt="product.name"
@@ -12,7 +15,7 @@
       </div>
       <div
         v-if="avatar"
-        class="absolute right-0 bottom-0 h-28 w-28 overflow-hidden rounded-2xl border-2 border-white shadow-lg"
+        class="video_summary_image_avatar"
       >
         <img
           :src="avatar.image"
@@ -22,34 +25,44 @@
       </div>
     </div>
 
-    <div class="glass_inset rounded-2xl p-4 md:p-5">
-      <dl class="space-y-3">
-        <div class="flex gap-2 text-sm">
-          <dt class="shrink-0 font-medium secondary_text_color">Product :</dt>
-          <dd class="font-semibold primary_text_color">{{ product.name }}</dd>
-        </div>
-        <div class="flex gap-2 text-sm">
-          <dt class="shrink-0 font-medium secondary_text_color">Video type :</dt>
-          <dd class="font-semibold primary_text_color">{{ videoType.title }}</dd>
-        </div>
-        <div v-if="avatar" class="flex gap-2 text-sm">
-          <dt class="shrink-0 font-medium secondary_text_color">Avatar :</dt>
-          <dd class="font-semibold primary_text_color">{{ avatar.name }}</dd>
-        </div>
-        <div class="flex gap-2 text-sm">
-          <dt class="shrink-0 font-medium secondary_text_color">Duration :</dt>
-          <dd class="font-semibold primary_text_color">{{ duration }}</dd>
-        </div>
-        <div class="flex items-center gap-2 text-sm">
-          <dt class="shrink-0 font-medium secondary_text_color">Credits :</dt>
-          <dd class="flex items-center gap-1.5 font-semibold primary_text_color">
-            {{ credits }} Credit
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M9.87891 19.7578C15.3349 19.7578 19.7578 15.3349 19.7578 9.87891C19.7578 4.42294 15.3349 0 9.87891 0C4.42294 0 0 4.42294 0 9.87891C0 15.3349 4.42294 19.7578 9.87891 19.7578Z" fill="#FFC843" />
-              <path d="M10.2134 5.78852L11.3152 8.02093C11.3696 8.13092 11.4746 8.20731 11.596 8.22509L14.0596 8.58315C14.3656 8.62772 14.4876 9.00355 14.2664 9.21935L12.4838 10.9569C12.396 11.0426 12.3558 11.1662 12.3764 11.2871L12.7973 13.7406C12.8495 14.0453 12.5296 14.2778 12.2561 14.1338L10.0527 12.9753C9.94401 12.9182 9.81426 12.9182 9.7056 12.9753L7.50216 14.1338C7.2284 14.2776 6.90877 14.0453 6.96102 13.7406L7.38186 11.2871C7.40271 11.1662 7.36254 11.0426 7.27451 10.9569L5.49191 9.21935C5.27062 9.00355 5.39268 8.6275 5.69871 8.58315L8.16229 8.22509C8.28369 8.20753 8.38885 8.13114 8.44307 8.02093L9.5449 5.78852C9.68123 5.51125 10.0764 5.51125 10.2134 5.78852Z" fill="#FFC843" />
-            </svg>
-          </dd>
-        </div>
+    <div class="video_summary_inset">
+      <dl class="video_summary_details">
+        <dt>Product</dt>
+        <span class="video_summary_colon" aria-hidden="true">:</span>
+        <dd>{{ product.name }}</dd>
+
+        <dt>Video type</dt>
+        <span class="video_summary_colon" aria-hidden="true">:</span>
+        <dd>{{ videoType.title }}</dd>
+
+        <template v-if="avatar">
+          <dt>Avatar</dt>
+          <span class="video_summary_colon" aria-hidden="true">:</span>
+          <dd>{{ avatar.name }}</dd>
+        </template>
+
+        <dt>Duration</dt>
+        <span class="video_summary_colon" aria-hidden="true">:</span>
+        <dd>{{ duration }}</dd>
+
+        <dt>Credits</dt>
+        <span class="video_summary_colon" aria-hidden="true">:</span>
+        <dd class="video_summary_credits">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_199_3066)">
+<path d="M9.98828 19.8677C15.4443 19.8677 19.8672 15.4447 19.8672 9.98877C19.8672 4.5328 15.4443 0.109863 9.98828 0.109863C4.53231 0.109863 0.109375 4.5328 0.109375 9.98877C0.109375 15.4447 4.53231 19.8677 9.98828 19.8677Z" fill="#FFC843"/>
+<path d="M9.98828 17.6724C14.2318 17.6724 17.6719 14.2323 17.6719 9.98877C17.6719 5.74524 14.2318 2.30518 9.98828 2.30518C5.74475 2.30518 2.30469 5.74524 2.30469 9.98877C2.30469 14.2323 5.74475 17.6724 9.98828 17.6724Z" fill="#D38700"/>
+<path d="M10.3227 5.89814L11.4246 8.13055C11.479 8.24053 11.584 8.31693 11.7054 8.33471L14.1689 8.69277C14.475 8.73733 14.597 9.11317 14.3757 9.32897L12.5931 11.0666C12.5053 11.1522 12.4652 11.2758 12.4858 11.3967L12.9066 13.8502C12.9589 14.1549 12.639 14.3874 12.3655 14.2434L10.162 13.0849C10.0534 13.0279 9.92364 13.0279 9.81497 13.0849L7.61153 14.2434C7.33778 14.3872 7.01814 14.1549 7.07039 13.8502L7.49123 11.3967C7.51209 11.2758 7.47191 11.1522 7.38388 11.0666L5.60129 9.32897C5.38 9.11317 5.50206 8.73711 5.80809 8.69277L8.27167 8.33471C8.39307 8.31715 8.49822 8.24075 8.55245 8.13055L9.65427 5.89814C9.7906 5.62087 10.1858 5.62087 10.3227 5.89814Z" fill="#FFC843"/>
+</g>
+<defs>
+<clipPath id="clip0_199_3066">
+<rect width="20" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+
+          {{ credits }} Credit
+        </dd>
       </dl>
     </div>
   </aside>

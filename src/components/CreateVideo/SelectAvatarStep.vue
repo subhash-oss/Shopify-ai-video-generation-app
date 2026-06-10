@@ -20,7 +20,7 @@
       </p>
     </div>
 
-    <div class="mt-8 flex gap-4 overflow-x-auto pb-2 md:gap-5">
+    <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
       <AvatarCard
         v-for="avatar in avatars"
         :key="avatar.id"

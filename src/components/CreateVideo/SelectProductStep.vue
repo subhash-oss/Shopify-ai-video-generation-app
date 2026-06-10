@@ -2,7 +2,7 @@
   <section class="w-full">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
-        <h1 class="heading_h6_semibold tracking-tight primary_text_color">
+        <h1 class="heading_h5_semibold tracking-tight primary_text_color">
           Select a product
         </h1>
         <p class="label_1_regular mt-md secondary_text_color">
@@ -10,30 +10,17 @@
         </p>
       </div>
 
-      <div class="flex flex-row gap-3 lg:flex-row lg:items-center">
+      <div class="flex flex-col md:flex-row gap-3 lg:items-center">
         <div class="relative min-w-0 flex-1 lg:flex-none">
-          <select
+          <CategoryDropdown
             v-model="selectedCategory"
-            class="mobile_product_filter w-full pr-10 pl-4 lg:glass_product_filter lg:min-w-[10rem]"
-          >
-            <option value="all">All categories</option>
-            <option value="skincare">Skincare</option>
-            <option value="makeup">Makeup</option>
-            <option value="wellness">Wellness</option>
-          </select>
-          <svg
-            class="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-gray-400"
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+            :options="categoryOptions"
+          />
         </div>
 
         <div class="relative min-w-0 flex-1 lg:flex-none">
           <svg
-            class="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-gray-400"
+            class="pointer-events-none absolute top-1/2 left-3.5 h-5 w-5 -translate-y-1/2 text-black-600"
             viewBox="0 0 20 20"
             fill="none"
             aria-hidden="true"
@@ -45,13 +32,18 @@
             v-model="searchQuery"
             type="search"
             placeholder="Search"
-            class="mobile_product_filter w-full rounded-full pr-4 pl-10 placeholder:text-gray-400 lg:glass_product_filter lg:min-w-[12rem]"
+            class="mobile_product_filter label_2_semibold primary_text_color w-full rounded-full pr-4 pl-10 py-lg placeholder:tertiary_text_color lg:glass_product_filter lg:min-w-[12rem]"
           />
         </div>
       </div>
     </div>
 
-    <div class="mt-6 grid grid-cols-2 gap-4 lg:mt-8 lg:grid-cols-4 lg:gap-6">
+    <ProductSearchEmptyState v-if="hasNoResults" />
+
+    <div
+      v-else
+      class="mt-6 grid grid-cols-1 gap-4 lg:mt-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6"
+    >
       <ProductCard
         v-for="product in displayedProducts"
         :key="product.id"
@@ -61,7 +53,7 @@
     </div>
 
     <div
-      v-if="showLoading"
+      v-if="showLoading && !hasNoResults"
       class="mt-6 flex items-center justify-center gap-2 lg:hidden"
     >
       <span class="wizard_loading_spinner" aria-hidden="true" />
@@ -73,6 +65,8 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue"
 import ProductCard from "./ProductCard.vue"
+import ProductSearchEmptyState from "./ProductSearchEmptyState.vue"
+import CategoryDropdown from "./CategoryDropdown.vue"
 import product_1 from "../../assets/images/product_1.png"
 import product_2 from "../../assets/images/product_2.png"
 import product_3 from "../../assets/images/product_3.png"
@@ -82,6 +76,13 @@ defineEmits(["select"])
 
 const selectedCategory = ref("all")
 const searchQuery = ref("")
+
+const categoryOptions = [
+  { value: "all", label: "All categories" },
+  { value: "skincare", label: "Skincare" },
+  { value: "makeup", label: "Makeup" },
+  { value: "wellness", label: "Wellness" },
+]
 const isDesktop = ref(false)
 const mobilePageSize = 4
 
@@ -106,6 +107,8 @@ const filteredProducts = computed(() => {
     return matchesCategory && matchesSearch
   })
 })
+
+const hasNoResults = computed(() => filteredProducts.value.length === 0)
 
 const displayedProducts = computed(() => {
   if (isDesktop.value) return filteredProducts.value

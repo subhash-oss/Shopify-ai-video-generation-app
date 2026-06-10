@@ -9,22 +9,22 @@
       </p>
 
       <div class="mt-6xl border-b border-gray-25">
-        <nav class="flex flex-wrap gap-3xl md:gap-6xl " aria-label="Video filters">
+        <nav class="flex flex-wrap gap-3xl md:gap-6xl" aria-label="Video filters">
           <button
             v-for="tab in tabs"
             :key="tab.id"
             type="button"
             class="cursor-pointer border-0 bg-transparent pb-lg label_2_regular"
             :class="activeTab === tab.id
-              ? 'text-[#5E39A6]'
+              ? 'font-semibold text-[#5E39A6]'
               : 'secondary_text_color hover:primary_text_color'"
-            @click="activeTab = tab.id"
+            @click="handleTabChange(tab.id)"
           >
             <span class="relative inline-block">
               {{ tab.label }} ({{ tab.count }})
               <span
                 v-if="activeTab === tab.id"
-                class="absolute bottom-[-12px] left-0 z-10 h-1 w-full bg-[#5E39A6]"
+                class="absolute bottom-[-12px] left-0 z-10 h-1 w-full rounded-full bg-[#5E39A6]"
                 aria-hidden="true"
               />
             </span>
@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="flex flex-1 items-center justify-center py-12 md:py-16">
+    <div class="mt-6xl w-full flex-1">
       <VideoTabEmptyState
         v-if="showTabEmptyState"
         :message="emptyMessage"
@@ -41,47 +41,30 @@
 
       <div
         v-else
-        class="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        ref="gridRef"
+        class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4  md:gap-5"
+        @click="closeMenu"
       >
-        <div
+        <MyVideoCard
           v-for="video in filteredVideos"
           :key="video.id"
-          class="glass_card"
-        >
-          <div class="flex aspect-video items-center justify-center bg-gradient-to-br from-[#f3e8ff] to-[#ede9fe]">
-            <span
-              v-if="video.status === 'generating'"
-              class="text-sm font-semibold text-[#7c3aed]"
-            >
-              Generating...
-            </span>
-            <span
-              v-else-if="video.status === 'completed'"
-              class="text-sm font-semibold text-gray-600"
-            >
-              Video ready
-            </span>
-            <span
-              v-else
-              class="text-sm font-semibold text-red-500"
-            >
-              Failed
-            </span>
-          </div>
-          <div class="px-4 py-3">
-            <p class="truncate text-sm font-semibold text-gray-800">
-              {{ video.title }}
-            </p>
-          </div>
-        </div>
+          :video="video"
+          :menu-open="openMenuVideoId === video.id"
+          @toggle-menu="toggleMenu(video.id)"
+          @close-menu="closeMenu"
+          @preview="$emit('preview', $event)"
+          @regenerate="$emit('regenerate', $event)"
+          @delete="$emit('delete', $event)"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { computed, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref } from "vue"
 import VideoTabEmptyState from "./VideoTabEmptyState.vue"
+import MyVideoCard from "./MyVideoCard.vue"
 
 const props = defineProps({
   videos: {
@@ -90,12 +73,44 @@ const props = defineProps({
   },
 })
 
+defineEmits(["preview", "regenerate", "delete"])
+
 const activeTab = ref("all")
+const openMenuVideoId = ref(null)
+const gridRef = ref(null)
+
+const toggleMenu = (videoId) => {
+  openMenuVideoId.value = openMenuVideoId.value === videoId ? null : videoId
+}
+
+const closeMenu = () => {
+  openMenuVideoId.value = null
+}
+
+const handleDocumentClick = (event) => {
+  if (openMenuVideoId.value === null) return
+  if (gridRef.value?.contains(event.target)) return
+  closeMenu()
+}
+
+const handleTabChange = (tabId) => {
+  activeTab.value = tabId
+  closeMenu()
+}
+
+onMounted(() => {
+  document.addEventListener("click", handleDocumentClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleDocumentClick)
+})
 
 const counts = computed(() => ({
   all: props.videos.length,
   completed: props.videos.filter((v) => v.status === "completed").length,
   generating: props.videos.filter((v) => v.status === "generating").length,
+  drafted: props.videos.filter((v) => v.status === "drafted").length,
   failed: props.videos.filter((v) => v.status === "failed").length,
 }))
 
@@ -103,6 +118,7 @@ const tabs = computed(() => [
   { id: "all", label: "All", count: counts.value.all },
   { id: "completed", label: "Completed", count: counts.value.completed },
   { id: "generating", label: "Generating", count: counts.value.generating },
+  { id: "drafted", label: "Drafted", count: counts.value.drafted },
   { id: "failed", label: "Failed", count: counts.value.failed },
 ])
 
@@ -115,6 +131,7 @@ const emptyMessages = {
   all: "No videos yet.",
   completed: "No completed videos yet.",
   generating: "No videos generating yet.",
+  drafted: "No drafted videos yet.",
   failed: "No failed videos yet.",
 }
 

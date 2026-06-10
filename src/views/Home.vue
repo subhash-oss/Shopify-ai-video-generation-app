@@ -32,7 +32,13 @@
         :class="hasVideos ? 'flex-col' : 'items-center justify-center'"
       >
         <VideoEmptyState v-if="!hasVideos" @create="handleCreateVideo" />
-        <MyVideos v-else :videos="videos" />
+        <MyVideos
+          v-else
+          :videos="videos"
+          @preview="handlePreviewVideo"
+          @regenerate="handleRegenerateVideo"
+          @delete="handleDeleteVideo"
+        />
       </main>
     </div>
 
@@ -53,7 +59,43 @@ import MyVideos from "../components/Home/MyVideos.vue"
 import CreateNewVideoButton from "../components/Home/CreateNewVideoButton.vue"
 import CreateVideoFlow from "../components/CreateVideo/CreateVideoFlow.vue"
 
-const videos = ref([])
+const videos = ref([
+  {
+    id: 1,
+    title: "Vitamin C Serum for Men",
+    status: "generating",
+    progress: 99,
+    videoType: "AI UGC",
+    duration: "16 sec",
+  },
+  {
+    id: 2,
+    title: "Purepet Adult Dry Cat Food",
+    status: "completed",
+    videoType: "AI UGC",
+    duration: "30 sec",
+    date: "May 20, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600&h=900&fit=crop",
+  },
+  {
+    id: 3,
+    title: "Body & Skin Whitening Serum",
+    status: "completed",
+    videoType: "Cinematic",
+    duration: "16 sec",
+    date: "May 19, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1620916564558-094858856d16?w=600&h=900&fit=crop",
+  },
+  {
+    id: 4,
+    title: "Vitamin C Serum for Men",
+    status: "completed",
+    videoType: "AI UGC",
+    duration: "16 sec",
+    date: "May 19, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=900&fit=crop",
+  },
+])
 const showCreateFlow = ref(false)
 
 const hasVideos = computed(() => videos.value.length > 0)
@@ -62,12 +104,36 @@ const handleCreateVideo = () => {
   showCreateFlow.value = true
 }
 
-const handleFlowComplete = ({ product }) => {
+const handleFlowComplete = ({ product, videoType }) => {
   showCreateFlow.value = false
-  videos.value.push({
+  videos.value.unshift({
     id: Date.now(),
     title: product?.name ?? "Product Showcase Video",
     status: "generating",
+    progress: 0,
+    videoType: videoType?.title ?? "AI UGC",
+    duration: "30 sec",
   })
+}
+
+const handlePreviewVideo = (video) => {
+  if (video.thumbnail) {
+    window.open(video.thumbnail, "_blank", "noopener,noreferrer")
+  }
+}
+
+const handleRegenerateVideo = (video) => {
+  const index = videos.value.findIndex((item) => item.id === video.id)
+  if (index === -1) return
+
+  videos.value[index] = {
+    ...videos.value[index],
+    status: "generating",
+    progress: 0,
+  }
+}
+
+const handleDeleteVideo = (video) => {
+  videos.value = videos.value.filter((item) => item.id !== video.id)
 }
 </script>
