@@ -1,5 +1,5 @@
 <template>
-  <header class="glass_panel flex w-full items-center justify-between px-6xl py-3xl">
+  <header class="glass_panel flex w-full items-center justify-between px-xxl md:px-6xl py-3xl">
     <div class="glass_panel_sheen" aria-hidden="true" />
 
     <div class="relative z-10">
@@ -7,7 +7,7 @@
     </div>
 
     <div class="relative z-10 flex items-center gap-3">
-      <div class="glass_inset_pill flex items-center gap-2 px-4 py-xl">
+      <div class="glass_inset_pill flex items-center gap-2 px-4 py-xl rounded-xl">
         <span class="flex items-center justify-center">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.87891 19.7578C15.3349 19.7578 19.7578 15.3349 19.7578 9.87891C19.7578 4.42294 15.3349 0 9.87891 0C4.42294 0 0 4.42294 0 9.87891C0 15.3349 4.42294 19.7578 9.87891 19.7578Z" fill="#FFC843"/>

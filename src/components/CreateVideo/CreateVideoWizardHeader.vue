@@ -26,11 +26,11 @@
           :key="step.id"
           :ref="(el) => setStepRef(index, el)"
           type="button"
-          class="cursor-default border-0 bg-transparent text-sm font-medium transition-colors"
+          class="cursor-default border-0 bg-transparent label_1_semibold font-medium transition-colors"
           :class="getStepClass(step.id)"
         >
           <span class="inline-flex items-center gap-2">
-            <component :is="step.icon" class="h-5 w-5 shrink-0" />
+            <img :src="step.icon" alt="" class="h-10xl w-10xl shrink-0" aria-hidden="true" />
             {{ step.label }}
           </span>
         </button>
@@ -49,7 +49,7 @@
     </nav>
 
     <div class="relative z-10 flex flex-1 items-center justify-end gap-3 lg:flex-none">
-      <div class="glass_inset_pill flex items-center gap-2 px-4 py-xl">
+      <div class="glass_inset_pill flex items-center gap-2 px-4 py-xl rounded-xl">
         <span class="flex items-center justify-center">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M9.87891 19.7578C15.3349 19.7578 19.7578 15.3349 19.7578 9.87891C19.7578 4.42294 15.3349 0 9.87891 0C4.42294 0 0 4.42294 0 9.87891C0 15.3349 4.42294 19.7578 9.87891 19.7578Z" fill="#FFC843" />
@@ -72,8 +72,11 @@
 </template>
 
 <script setup>
-import { h, nextTick, onMounted, onUnmounted, ref, watch } from "vue"
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue"
 import SettingsGearIcon from "../../assets/images/SettingsGearIcon.svg"
+import ProductIcon from "../../assets/images/ProductIcon.svg"
+import VideoIcon from "../../assets/images/VideoIcon.svg"
+import ScriptIcon from "../../assets/images/ScriptIcon.svg"
 
 const props = defineProps({
   activeStep: {
@@ -81,67 +84,6 @@ const props = defineProps({
     default: "product",
   },
 })
-
-const ProductIcon = {
-  render() {
-    return h("svg", { width: 20, height: 20, viewBox: "0 0 20 20", fill: "none" }, [
-      h("path", {
-        d: "M3 6.5L10 2.5L17 6.5V13.5L10 17.5L3 13.5V6.5Z",
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-        "stroke-linejoin": "round",
-      }),
-      h("path", {
-        d: "M10 10.5V17.5M3 6.5L10 10.5L17 6.5",
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-        "stroke-linejoin": "round",
-      }),
-    ])
-  },
-}
-
-const VideoIcon = {
-  render() {
-    return h("svg", { width: 20, height: 20, viewBox: "0 0 20 20", fill: "none" }, [
-      h("rect", {
-        x: 2.5,
-        y: 5,
-        width: 11,
-        height: 10,
-        rx: 1.5,
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-      }),
-      h("path", {
-        d: "M13.5 8.5L17.5 6.5V13.5L13.5 11.5V8.5Z",
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-        "stroke-linejoin": "round",
-      }),
-    ])
-  },
-}
-
-const ScriptIcon = {
-  render() {
-    return h("svg", { width: 20, height: 20, viewBox: "0 0 20 20", fill: "none" }, [
-      h("path", {
-        d: "M5.5 3.5H12.5L15.5 6.5V16.5H5.5V3.5Z",
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-        "stroke-linejoin": "round",
-      }),
-      h("path", {
-        d: "M12.5 3.5V6.5H15.5M7.5 10H13.5M7.5 13H11.5",
-        stroke: "currentColor",
-        "stroke-width": "1.2",
-        "stroke-linecap": "round",
-      }),
-    ])
-  },
-}
-
 defineEmits(["back"])
 
 const steps = [

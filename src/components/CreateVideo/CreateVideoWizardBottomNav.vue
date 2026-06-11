@@ -3,22 +3,30 @@
     class="wizard_bottom_nav fixed right-0 bottom-0 left-0 z-20 border-t border-gray-25 bg-white lg:hidden"
     aria-label="Video creation progress"
   >
-    <div class="flex items-center justify-around px-8 py-4">
+    <div
+      ref="stepsRowRef"
+      class="relative px-8 pb-3 pt-4"
+    >
+      <div class="flex items-center justify-around">
+        <div
+          v-for="(step, index) in steps"
+          :key="step.id"
+          :ref="(el) => setStepRef(index, el)"
+          class="flex h-10 w-10 items-center justify-center rounded-xl transition-colors"
+          :class="getStepClass(step.id)"
+        >
+          <img :src="step.icon" alt="" class="h-9xl w-9xl" aria-hidden="true" />
+        </div>
+      </div>
+
       <div
-        v-for="step in steps"
-        :key="step.id"
-        class="relative flex flex-col items-center"
+        class="wizard_progress_track absolute bottom-0"
+        :style="trackStyle"
+        aria-hidden="true"
       >
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-xl transition-colors"
-          :class="activeStep === step.id ? 'text-[#5F3AA7]' : 'text-[#9c9da6]'"
-        >
-          <component :is="step.icon" class="h-7 w-7" />
-        </div>
-        <span
-          v-if="activeStep === step.id"
-          class="absolute -bottom-1 h-1 w-8 rounded-full bg-[#5F3AA7]"
-          aria-hidden="true"
+          class="wizard_progress_fill"
+          :style="{ width: fillWidth }"
         />
       </div>
     </div>
@@ -26,99 +34,97 @@
 </template>
 
 <script setup>
-import { h } from "vue"
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue"
+import ProductIcon from "../../assets/images/ProductIcon.svg"
+import VideoIcon from "../../assets/images/VideoIcon.svg"
+import ScriptIcon from "../../assets/images/ScriptIcon.svg"
 
-defineProps({
+const props = defineProps({
   activeStep: {
     type: String,
     default: "product",
   },
 })
 
-const ProductIcon = {
-  render() {
-    return h("svg", { viewBox: "0 0 32 32", fill: "none" }, [
-      h("path", {
-        d: "M6 12L16 6L26 12V22L16 28L6 22V12Z",
-        fill: "currentColor",
-        opacity: "0.2",
-      }),
-      h("path", {
-        d: "M6 12L16 6L26 12V22L16 28L6 22V12Z",
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-        "stroke-linejoin": "round",
-      }),
-      h("path", {
-        d: "M16 17V28M6 12L16 17L26 12",
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-        "stroke-linejoin": "round",
-      }),
-    ])
-  },
-}
-
-const VideoIcon = {
-  render() {
-    return h("svg", { viewBox: "0 0 32 32", fill: "none" }, [
-      h("rect", {
-        x: 5,
-        y: 9,
-        width: 16,
-        height: 14,
-        rx: 2,
-        fill: "currentColor",
-        opacity: "0.2",
-      }),
-      h("rect", {
-        x: 5,
-        y: 9,
-        width: 16,
-        height: 14,
-        rx: 2,
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-      }),
-      h("path", {
-        d: "M21 14L27 11V21L21 18V14Z",
-        fill: "currentColor",
-        opacity: "0.35",
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-        "stroke-linejoin": "round",
-      }),
-    ])
-  },
-}
-
-const ScriptIcon = {
-  render() {
-    return h("svg", { viewBox: "0 0 32 32", fill: "none" }, [
-      h("path", {
-        d: "M9 6H20L25 11V26H9V6Z",
-        fill: "currentColor",
-        opacity: "0.2",
-      }),
-      h("path", {
-        d: "M9 6H20L25 11V26H9V6Z",
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-        "stroke-linejoin": "round",
-      }),
-      h("path", {
-        d: "M20 6V11H25M13 16H21M13 20H18",
-        stroke: "currentColor",
-        "stroke-width": "1.5",
-        "stroke-linecap": "round",
-      }),
-    ])
-  },
-}
-
 const steps = [
   { id: "product", icon: ProductIcon },
   { id: "video-type", icon: VideoIcon },
   { id: "script", icon: ScriptIcon },
 ]
+
+const stepOrder = steps.map((step) => step.id)
+
+const stepsRowRef = ref(null)
+const stepButtonRefs = ref([])
+
+const trackStyle = ref({
+  left: "0px",
+  width: "0px",
+})
+
+const fillWidth = ref("0%")
+
+const setStepRef = (index, el) => {
+  if (el) stepButtonRefs.value[index] = el
+}
+
+const updateProgressBar = () => {
+  const row = stepsRowRef.value
+  const buttons = stepButtonRefs.value.filter(Boolean)
+
+  if (!row || buttons.length !== steps.length) return
+
+  const rowRect = row.getBoundingClientRect()
+  const firstRect = buttons[0].getBoundingClientRect()
+  const lastRect = buttons[buttons.length - 1].getBoundingClientRect()
+  const activeIndex = Math.max(0, stepOrder.indexOf(props.activeStep))
+  const activeRect = buttons[activeIndex].getBoundingClientRect()
+
+  const trackLeft = firstRect.left - rowRect.left
+  const trackWidth = lastRect.right - firstRect.left
+  const fillPx = activeRect.right - firstRect.left
+
+  trackStyle.value = {
+    left: `${trackLeft}px`,
+    width: `${trackWidth}px`,
+  }
+
+  fillWidth.value = trackWidth > 0
+    ? `${(fillPx / trackWidth) * 100}%`
+    : "0%"
+}
+
+const getStepClass = (stepId) => {
+  const activeIndex = stepOrder.indexOf(props.activeStep)
+  const stepIndex = stepOrder.indexOf(stepId)
+
+  if (stepIndex === activeIndex) return "wizard_step_active"
+  if (stepIndex < activeIndex) return "wizard_step_completed"
+  return "wizard_step_inactive"
+}
+
+let resizeObserver = null
+
+onMounted(() => {
+  nextTick(() => {
+    updateProgressBar()
+
+    if (typeof ResizeObserver !== "undefined" && stepsRowRef.value) {
+      resizeObserver = new ResizeObserver(() => updateProgressBar())
+      resizeObserver.observe(stepsRowRef.value)
+    }
+
+    window.addEventListener("resize", updateProgressBar)
+  })
+})
+
+onUnmounted(() => {
+  resizeObserver?.disconnect()
+  window.removeEventListener("resize", updateProgressBar)
+})
+
+watch(
+  () => props.activeStep,
+  () => nextTick(updateProgressBar),
+)
 </script>

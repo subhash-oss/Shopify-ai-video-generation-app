@@ -110,7 +110,6 @@ const counts = computed(() => ({
   all: props.videos.length,
   completed: props.videos.filter((v) => v.status === "completed").length,
   generating: props.videos.filter((v) => v.status === "generating").length,
-  drafted: props.videos.filter((v) => v.status === "drafted").length,
   failed: props.videos.filter((v) => v.status === "failed").length,
 }))
 
@@ -118,7 +117,6 @@ const tabs = computed(() => [
   { id: "all", label: "All", count: counts.value.all },
   { id: "completed", label: "Completed", count: counts.value.completed },
   { id: "generating", label: "Generating", count: counts.value.generating },
-  { id: "drafted", label: "Drafted", count: counts.value.drafted },
   { id: "failed", label: "Failed", count: counts.value.failed },
 ])
 
@@ -131,7 +129,6 @@ const emptyMessages = {
   all: "No videos yet.",
   completed: "No completed videos yet.",
   generating: "No videos generating yet.",
-  drafted: "No drafted videos yet.",
   failed: "No failed videos yet.",
 }
 

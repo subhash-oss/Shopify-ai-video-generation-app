@@ -5,16 +5,18 @@
   >
     <div
       v-if="video.status === 'generating'"
-      class="flex h-full flex-col justify-between bg-gradient-to-b from-[#b794d8] via-[#8b6ab8] to-[#5a3d7a] p-4xl"
+      class="relative flex h-full flex-col justify-between overflow-hidden p-4xl"
     >
-      <div class="flex items-start justify-between gap-3">
+      <GeneratingVideoBackground />
+
+      <div class="relative z-10 flex items-start justify-between gap-3">
         <span class="heading_h6_bold text-white">{{ video.progress ?? 0 }}%</span>
         <span class="rounded-full border border-white/45 px-2.5 py-0.5 label_3_semibold text-white">
           {{ video.videoType }}
         </span>
       </div>
 
-      <div class="flex flex-1 flex-col items-center justify-center py-4">
+      <div class="relative z-10 flex flex-1 flex-col items-center justify-center py-4">
         <div class="relative flex items-center justify-center">
           <img
             :src="SparkleIcon"
@@ -37,7 +39,7 @@
         </p>
       </div>
 
-      <div>
+      <div class="relative z-10">
         <p class="label_1_semibold text-white">
           {{ video.title }}
         </p>
@@ -188,6 +190,7 @@
 <script setup>
 import { computed, ref } from "vue"
 import SparkleIcon from "../../assets/images/SparkleIcon.svg"
+import GeneratingVideoBackground from "./GeneratingVideoBackground.vue"
 
 const props = defineProps({
   video: {
