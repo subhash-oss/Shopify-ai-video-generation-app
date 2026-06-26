@@ -33,6 +33,10 @@
 
 <script setup>
 import AvatarCard from "./AvatarCard.vue"
+import AvatarOne from "../../assets/images/AvatarOne.png"
+import AvatarTwo from "../../assets/images/AvatarTwo.png"
+import AvatarThree from "../../assets/images/AvatarThree.png"
+import AvatarFour from "../../assets/images/AvatarFour.png"
 
 defineEmits(["back", "select"])
 
@@ -42,28 +46,28 @@ const avatars = [
     name: "Olivia Stone",
     style: "Elegant & premium",
     bestFor: "Luxury skincare, wellness, high-end brands",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop",
+    image: AvatarOne,
   },
   {
     id: 2,
     name: "Sarah Mitchell",
     style: "Professional & confident",
     bestFor: "Corporate, B2B, professional services",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=600&fit=crop",
+    image: AvatarTwo,
   },
   {
     id: 3,
     name: "James Carter",
     style: "Friendly & approachable",
     bestFor: "Lifestyle, fitness, everyday products",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
+    image: AvatarThree,
   },
   {
     id: 4,
     name: "Aanya Sharma",
     style: "Warm & relatable",
     bestFor: "Beauty, fashion, social media content",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop",
+    image: AvatarFour,
   },
 ]
 </script>

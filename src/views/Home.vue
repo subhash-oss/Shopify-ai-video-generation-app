@@ -58,6 +58,9 @@ import VideoEmptyState from "../components/Home/VideoEmptyState.vue"
 import MyVideos from "../components/Home/MyVideos.vue"
 import CreateNewVideoButton from "../components/Home/CreateNewVideoButton.vue"
 import CreateVideoFlow from "../components/CreateVideo/CreateVideoFlow.vue"
+import VideoImageOne from "../assets/images/VideoImageOne.png"
+import VideoImageTwo from "../assets/images/VideoImageTwo.png"
+import VideoImageThree from "../assets/images/VideoImageThree.png"
 
 const videos = ref([
   {
@@ -75,7 +78,7 @@ const videos = ref([
     videoType: "AI UGC",
     duration: "30 sec",
     date: "May 20, 2026",
-    thumbnail: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600&h=900&fit=crop",
+    thumbnail: VideoImageOne,
   },
   {
     id: 3,
@@ -84,7 +87,7 @@ const videos = ref([
     videoType: "Cinematic",
     duration: "16 sec",
     date: "May 19, 2026",
-    thumbnail: "https://images.unsplash.com/photo-1620916564558-094858856d16?w=600&h=900&fit=crop",
+    thumbnail: VideoImageTwo,
   },
   {
     id: 4,
@@ -93,7 +96,7 @@ const videos = ref([
     videoType: "AI UGC",
     duration: "16 sec",
     date: "May 19, 2026",
-    thumbnail: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=900&fit=crop",
+    thumbnail: VideoImageThree,
   },
 ])
 const showCreateFlow = ref(false)
