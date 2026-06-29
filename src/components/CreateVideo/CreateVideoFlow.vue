@@ -9,7 +9,7 @@
       aria-hidden="true"
     />
 
-    <div class="relative z-10 flex min-h-screen w-full flex-col px-6xl pb-24 pt-5xl lg:px-13xl lg:pb-8">
+    <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6xl pb-24 pt-5xl lg:px-13xl lg:pb-8">
       <CreateVideoWizardHeader
         :active-step="headerStep"
         @back="handleBack"

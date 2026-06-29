@@ -19,7 +19,7 @@
     />
 
     <div
-      class="relative z-10 flex min-h-screen w-full flex-col px-6xl pt-5xl md:px-13xl"
+      class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6xl pt-5xl md:px-13xl"
       :class="hasVideos ? 'pb-28 lg:pb-8' : 'pb-6'"
     >
       <GlassHeader

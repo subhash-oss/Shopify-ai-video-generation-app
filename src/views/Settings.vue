@@ -9,7 +9,7 @@
       aria-hidden="true"
     />
 
-    <div class="relative z-10 flex min-h-screen w-full flex-col px-6xl pb-10 pt-5xl md:px-13xl">
+    <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6xl pb-10 pt-5xl md:px-13xl">
       <SettingsHeader />
 
       <main class="mt-8 w-full flex-1">

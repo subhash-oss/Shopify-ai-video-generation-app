@@ -1,7 +1,9 @@
 <template>
-  <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white">
-    <BrandingSection />
-    <SigninForm />
+  <div class="min-h-screen bg-white">
+    <div class="mx-auto grid min-h-screen max-w-[1440px] grid-cols-1 lg:grid-cols-2">
+      <BrandingSection />
+      <SigninForm />
+    </div>
   </div>
 </template>
 
